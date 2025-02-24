@@ -1,0 +1,18 @@
+{
+	"id": "skullatro",
+	"name": "Skullatro",
+	"display_name": "Skullatro",
+	"author": ["EverSoNitro", "Ice", "melonade"],
+	"description": "check it out im in the house like carpet",
+	"prefix": "skullatro",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "000000",
+	"badge_text_colour": "ffffff",
+	"version": "0.0.0",
+	"dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1314d)", 
+		"Lovely (*)", 
+		"Balatro (>=1.0.1m)"
+    ]
+}
