@@ -28,9 +28,8 @@ SMODS.Joker{
         } }
     end,
     calculate = function(self,card,context)
-        -- TODO: make it so it only works on boss blinds (i have no idea what context is used for this)
-        if context.setting_blind then
-            if pseudorandom("filia", card.ability.extra.probability, card.ability.extra.chance) <= card.ability.extra.chance then
+        if context.setting_blind and G.GAME.blind.boss == true then
+            if pseudorandom("filia", card.ability.extra.probability, card.ability.extra.chance) <= card.ability.extra.probability then
                 G.E_MANAGER:add_event(Event({func = function()
                     G.E_MANAGER:add_event(Event({func = function()
                         G.GAME.blind:disable()
@@ -80,8 +79,7 @@ SMODS.Joker{
             end
         end
 
-        -- TODO: fix joker proccing after end of round
-        if context.individual and context.cardarea == G.hand then
+        if context.individual and context.cardarea == G.hand and not context.end_of_round then
             if context.other_card:is_suit('Diamonds') then
                 card.ability.extra.triggered = true
                 if context.other_card.debuff then
