@@ -1,44 +1,34 @@
+
+
 SMODS.Joker{
     name = "Filia",
     key = "filia",
     loc_txt = {
         name = "Filia",
         text = {
-            "{C:green}#1# in #2#{} chance to disable",
-            "{C:attention}Boss Blind{} effect at",
-            "the start of the round."
+            "Gains {C:mult}+5{} Mult any time",
+            "a Food Joker {C:attention}expires{}",
+            "(Currently {C:mult}+#1#{} Mult)"
         }
     },
     rarity = 2,
-    blueprint_compat = false,
-    atlas = "filiaAtlas",
-    pos = {x = 0, y = 0},
+    blueprint_compat = true,
+    atlas = "skullatroJokers",
+    pos = {x = 6, y = 0},
     config = {
         extra = {
-            probability = 1,
-            chance = 5
+            currentMult = 0
         }
     },
     loc_vars = function(self,info_queue,card)
-        card.ability.extra.probability = G.GAME.probabilities.normal
-
         return { vars = {
-            card.ability.extra.probability,
-            card.ability.extra.chance
+            card.ability.extra.currentMult
         } }
     end,
     calculate = function(self,card,context)
-        if context.setting_blind and G.GAME.blind.boss == true then
-            if pseudorandom("filia", card.ability.extra.probability, card.ability.extra.chance) <= card.ability.extra.probability then
-                G.E_MANAGER:add_event(Event({func = function()
-                    G.E_MANAGER:add_event(Event({func = function()
-                        G.GAME.blind:disable()
-                        play_sound('timpani')
-                        delay(0.4)
-                        return true end }))
-                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('ph_boss_disabled')})
-                return true end }))
-            end
+        --print(context.food_joker_destroyed)
+        if context.food_joker_destroyed then
+            print("destroying food joker")
         end
     end
 }
@@ -55,8 +45,8 @@ SMODS.Joker{
     },
     rarity = 3,
     blueprint_compat = true,
-    atlas = "cerebellaAtlas",
-    pos = {x = 0, y = 0},
+    atlas = "skullatroJokers",
+    pos = {x = 7, y = 0},
     config = {
         extra = {
             triggered = false,
