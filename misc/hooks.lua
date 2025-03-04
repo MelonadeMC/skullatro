@@ -3,14 +3,10 @@ local temporarySolutionFoodJokersArray = {"Ramen", "Cavendish", "Popcorn", "Ice 
 -- add joker_destroyed context
 local card_remove_ref = Card.remove
 function Card:remove()
-    -- TODO: figure out why food jokers going extinct dont meet the condition????
-    if self.label ~= nil and self.label == "Gros Michel" then
-        print(self.area)
-        print(self.label)
-    end
-    if self.area and (self.area == G.jokers) then
+    if self.added_to_deck and self.ability.set == "Joker" and not G.CONTROLLER.locks.selling_card then
         for _,v in pairs(temporarySolutionFoodJokersArray) do
             if v == self.label then
+                --print(self.label)
                 SMODS.calculate_context({food_joker_destroyed = true , card_destroyed = self})
             end
         end

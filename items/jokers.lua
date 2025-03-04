@@ -1,5 +1,3 @@
-
-
 SMODS.Joker{
     name = "Filia",
     key = "filia",
@@ -26,9 +24,25 @@ SMODS.Joker{
         } }
     end,
     calculate = function(self,card,context)
-        --print(context.food_joker_destroyed)
         if context.food_joker_destroyed then
-            print("destroying food joker")
+            G.E_MANAGER:add_event(Event({
+                func = function() 
+                    card.ability.extra.currentMult = card.ability.extra.currentMult + 5
+                    card:juice_up(1, 0.25)
+                    return true 
+                end
+            }))
+            return {
+                message = "+5 Mult",
+                colour = G.C.RED
+            }
+        end
+
+        if context.joker_main then
+            return {
+                card = card,
+                mult = card.ability.extra.currentMult
+            }
         end
     end
 }
@@ -89,6 +103,68 @@ SMODS.Joker{
 
         if context.after and context.cardarea == G.play or context.end_of_round then
             card.ability.extra.triggered = false
+        end
+    end
+}
+
+SMODS.Joker{
+    name = "Peacock",
+    key = "peacock",
+    loc_txt = {
+        name = "Peacock",
+        text = {
+            "{C:green}#1# in #2#{} chance for",
+            "any {C:attention}played 8s{} to be",
+            "copied and redrawn",
+            "when scored"
+        }
+    },
+    rarity = 2,
+    blueprint_compat = true,
+    atlas = "skullatroJokers",
+    pos = {x = 4, y = 0},
+    config = {
+        extra = {
+            probability = 1,
+            chance = 2
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        card.ability.extra.probability = G.GAME.probabilities.normal
+        return { vars = {
+            card.ability.extra.probability,
+            card.ability.extra.chance
+        } }
+    end,
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play then
+            --print(context.other_card:get_id())
+            if context.other_card:get_id() == 8 then
+                local randomchance = pseudorandom("peacock", card.ability.extra.probability, card.ability.extra.chance)
+                print(randomchance)
+                if randomchance <= card.ability.extra.probability then
+                    local _card = copy_card(context.other_card, nil, nil, G.playing_card)
+                    _card:add_to_deck()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    table.insert(G.playing_cards, _card)
+                    G.hand:emplace(_card)
+                    _card.states.visible = nil
+
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            _card:start_materialize()
+                            return true
+                        end
+                    })) 
+
+                    return {
+                        message = localize('k_copied_ex'),
+                        colour = G.C.CHIPS,
+                        card = card,
+                        playing_cards_created = {true}
+                    }
+                end
+            end
         end
     end
 }
