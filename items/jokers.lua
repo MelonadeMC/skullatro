@@ -10,6 +10,7 @@ SMODS.Joker{
         }
     },
     rarity = 2,
+    cost = 5,
     blueprint_compat = true,
     atlas = "skullatroJokers",
     pos = {x = 6, y = 0},
@@ -58,6 +59,7 @@ SMODS.Joker{
         }
     },
     rarity = 3,
+    cost = 8,
     blueprint_compat = true,
     atlas = "skullatroJokers",
     pos = {x = 7, y = 0},
@@ -120,6 +122,7 @@ SMODS.Joker{
         }
     },
     rarity = 2,
+    cost = 5,
     blueprint_compat = true,
     atlas = "skullatroJokers",
     pos = {x = 4, y = 0},
